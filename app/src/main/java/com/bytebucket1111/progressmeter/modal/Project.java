@@ -1,10 +1,23 @@
 package com.bytebucket1111.progressmeter.modal;
 
+import java.util.ArrayList;
+
 public class Project {
 
-    private String title, description, geolocation,startDate,endDate,updateId,userid;
+    private String title, description, geolocation,startDate,duration,userid;
+    private ArrayList<String>updateId;
 
     public Project() {
+    }
+
+    public Project(String title, String description, String geolocation, String startDate, String duration, String userid, ArrayList<String> updateId) {
+        this.title = title;
+        this.description = description;
+        this.geolocation = geolocation;
+        this.startDate = startDate;
+        this.duration = duration;
+        this.userid = userid;
+        this.updateId = updateId;
     }
 
     public String getUserid() {
@@ -12,17 +25,6 @@ public class Project {
     }
 
     public void setUserid(String userid) {
-        this.userid = userid;
-    }
-
-    public Project(String title, String description, String geolocation, String startDate, String endDate, String updateId, String userid) {
-
-        this.title = title;
-        this.description = description;
-        this.geolocation = geolocation;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.updateId = updateId;
         this.userid = userid;
     }
 
@@ -58,19 +60,19 @@ public class Project {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getDuration() {
+        return duration;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
-    public String getUpdateId() {
+    public ArrayList<String> getUpdateId() {
         return updateId;
     }
 
-    public void setUpdateId(String updateId) {
+    public void setUpdateId(ArrayList<String> updateId) {
         this.updateId = updateId;
     }
 }

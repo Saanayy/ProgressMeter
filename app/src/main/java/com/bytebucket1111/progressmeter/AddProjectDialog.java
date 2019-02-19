@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -15,6 +16,7 @@ public class AddProjectDialog extends AppCompatDialogFragment {
     private TextInputEditText inputEditTextTitle,inputEditTextDesc,inputEditTextGeolocation,inputEditTextStartDate, inputEditTextDuration;
     private AddProjectListener listener;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -40,10 +42,10 @@ public class AddProjectDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String title = inputEditTextTitle.getText().toString();
-                        String description = inputEditTextTitle.getText().toString();
-                        String geolocation = inputEditTextTitle.getText().toString();
-                        String startDate = inputEditTextTitle.getText().toString();
-                        String duration = inputEditTextTitle.getText().toString();
+                        String description = inputEditTextDesc.getText().toString();
+                        String geolocation = inputEditTextGeolocation.getText().toString();
+                        String startDate = inputEditTextStartDate.getText().toString();
+                        String duration = inputEditTextDuration.getText().toString();
                         listener.addProjectToFirebase(title, description,geolocation,startDate,duration);
                     }
                 });

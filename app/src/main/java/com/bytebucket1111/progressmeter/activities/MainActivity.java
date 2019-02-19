@@ -80,7 +80,9 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     public void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration) {
         Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
         final String projectKey = dbRefProjects.push().getKey();
-        Project project = new Project("abs","abas","asa","sasa","sasas","asas",userId);
+        ArrayList<String>updateList = new ArrayList<>();
+        updateList.add("dummy");
+        Project project = new Project(title,desc,geolocation,startDate,duration,userId,updateList);
         dbRefProjects.child(projectKey).setValue(project);
         dbRefContractors.child(userId).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
