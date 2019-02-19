@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "273919854427",
+    "firebase_url": "https://progressmeter-821e1.firebaseio.com",
+    "project_id": "progressmeter-821e1",
+    "storage_bucket": "progressmeter-821e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273919854427:android:d4e70dd08865db72",
+        "android_client_info": {
+          "package_name": "com.bytebucket1111.progressmeter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "273919854427-l665km75dvc75nprjjh214h50r6id5f7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN07Q6IuE0DL2D2M3A7itTTrtlHqEZmOE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
