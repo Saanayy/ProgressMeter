@@ -1,6 +1,8 @@
 package com.bytebucket1111.progressmeter.activities;
 
+import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,12 +11,25 @@ import android.widget.Toast;
 
 import com.bytebucket1111.progressmeter.AddProjectDialog;
 import com.bytebucket1111.progressmeter.R;
+import com.bytebucket1111.progressmeter.modal.Project;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AddProjectDialog.AddProjectListener {
 
     //comfirmation before exit
     private boolean appExit=false;
     private FloatingActionButton fabAddProject;
+    DatabaseReference dbRefProjects = FirebaseDatabase.getInstance().getReference("Projects");
+    DatabaseReference dbRefContractors = FirebaseDatabase.getInstance().getReference("Contractors");
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +43,11 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                 openAddProjectDialog();
             }
         });
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            userId = acct.getId();
+        }
 
     }
 
@@ -59,7 +79,22 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     @Override
     public void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration) {
         Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
-        
+        final String projectKey = dbRefProjects.push().getKey();
+        Project project = new Project("abs","abas","asa","sasa","sasas","asas",userId);
+        dbRefProjects.child(projectKey).setValue(project);
+        dbRefContractors.child(userId).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<String>  project = (ArrayList<String>) dataSnapshot.getValue();
+                String id = project.size() + "";
+                dbRefContractors.child(userId).child("projectIds").child(id).setValue(projectKey);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }

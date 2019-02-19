@@ -2,17 +2,28 @@ package com.bytebucket1111.progressmeter.modal;
 
 public class Project {
 
-    private String title, description, geolocation,startDate,endDate;
+    private String title, description, geolocation,startDate,endDate,updateId,userid;
 
     public Project() {
     }
 
-    public Project(String title, String description, String geolocation, String startDate, String endDate) {
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public Project(String title, String description, String geolocation, String startDate, String endDate, String updateId, String userid) {
+
         this.title = title;
         this.description = description;
         this.geolocation = geolocation;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.updateId = updateId;
+        this.userid = userid;
     }
 
     public String getTitle() {
@@ -53,5 +64,13 @@ public class Project {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getUpdateId() {
+        return updateId;
+    }
+
+    public void setUpdateId(String updateId) {
+        this.updateId = updateId;
     }
 }
