@@ -6,10 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.bytebucket1111.progressmeter.AddProjectDialog;
+import com.bytebucket1111.progressmeter.ProjectAdapter;
 import com.bytebucket1111.progressmeter.R;
 import com.bytebucket1111.progressmeter.modal.Project;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -26,10 +30,14 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
 
     //comfirmation before exit
     private boolean appExit=false;
+    String TAG = "hello";
     private FloatingActionButton fabAddProject;
     DatabaseReference dbRefProjects = FirebaseDatabase.getInstance().getReference("Projects");
     DatabaseReference dbRefContractors = FirebaseDatabase.getInstance().getReference("Contractors");
     private String userId;
+    ArrayList<Project> projects = new ArrayList<>();
+    private RecyclerView rvProjectList;
+    private ProjectAdapter projectAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +51,66 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                 openAddProjectDialog();
             }
         });
+        rvProjectList = findViewById(R.id.main_project_recycler_view);
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
         if (acct != null) {
             String personName = acct.getDisplayName();
             userId = acct.getId();
         }
+
+        fetchProjects();
+
+
+    }
+
+    private void fetchProjects() {
+        dbRefContractors.child(userId).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final ArrayList<String> projectNames = (ArrayList<String>) dataSnapshot.getValue();
+                projects.clear();
+                for (int i = 1;i<projectNames.size();i++)
+                {
+
+                        //final Project[] project = new Project[1];
+                    final int finalI = i;
+                    dbRefProjects.child(projectNames.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Project project = dataSnapshot.getValue(Project.class);
+                                Log.d(TAG, "title: "+project.getTitle());
+                                projects.add(project);
+                                Log.d(TAG, "size: "+projects.size());
+                                if(finalI ==projectNames.size()-1)
+                                {
+                                    projectAdapter = new ProjectAdapter(projects,MainActivity.this);
+                                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+                                    rvProjectList.setAdapter(projectAdapter);
+                                    rvProjectList.setLayoutManager(linearLayoutManager);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        //projects.add(project[0]);
+                        //Log.d(TAG, "size1: "+projects.size());
+
+                }
+                Log.d("hello", "rv created: "+projects.size());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 
     }
 
