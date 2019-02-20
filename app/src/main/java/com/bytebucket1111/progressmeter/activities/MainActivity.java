@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -66,17 +67,21 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                 projects.clear();
                 long i = 0;
                 final long childCount = dataSnapshot.getChildrenCount();
+                Log.d(TAG,"CC:"+childCount);
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String str = ds.getValue(String.class);
+                    Log.d(TAG,"str"+i+str);
                     i++;
                     final long I = i;
-                    if (!str.equalsIgnoreCase("dummy")) {
-                        dbRefProjects.child(str).addListenerForSingleValueEvent(new ValueEventListener() {
+                    if (!str.equals("dummy")) {
+                        dbRefProjects.child(str).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Project project = dataSnapshot.getValue(Project.class);
+                                Log.d(TAG,"pt:"+I+project.getTitle());
                                 projects.add(project);
-                                if (I == childCount - 1) {
+                                if (I == childCount) {
+                                    Log.d(TAG,"Ps:"+projects.size());
                                     projectAdapter = new ProjectAdapter(projects, MainActivity.this);
                                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
                                     rvProjectList.setAdapter(projectAdapter);
