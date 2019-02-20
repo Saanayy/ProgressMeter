@@ -66,6 +66,8 @@
                         android:id="@+id/create_project_start_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:focusable="false"
                         android:hint="Start Date"
                         />
                 </android.support.design.widget.TextInputLayout>

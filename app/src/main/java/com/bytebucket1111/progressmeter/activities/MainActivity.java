@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                                     projectAdapter = new ProjectAdapter(projects, MainActivity.this);
                                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
                                     rvProjectList.setLayoutManager(linearLayoutManager);
-                                    rvProjectList.scrollToPosition(projects.size()-1);
                                     rvProjectList.setAdapter(projectAdapter);
 
                                 }
