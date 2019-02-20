@@ -1,6 +1,5 @@
 package com.bytebucket1111.progressmeter.activities;
 
-import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bytebucket1111.progressmeter.AddProjectDialog;
-import com.bytebucket1111.progressmeter.MyItemAnimator;
 import com.bytebucket1111.progressmeter.ProjectAdapter;
 import com.bytebucket1111.progressmeter.R;
 import com.bytebucket1111.progressmeter.modal.Project;
@@ -83,16 +81,13 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Project project = dataSnapshot.getValue(Project.class);
                                 Log.d(TAG,"pt:"+I+project.getTitle());
-                                projects.add(project);
+                                projects.add(0,project);
                                 if (I == childCount) {
                                     Log.d(TAG,"Ps:"+projects.size());
                                     projectAdapter = new ProjectAdapter(projects, MainActivity.this);
                                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-                                    linearLayoutManager.setReverseLayout(true);
-
                                     rvProjectList.setLayoutManager(linearLayoutManager);
                                     rvProjectList.scrollToPosition(projects.size()-1);
-                                    rvProjectList.setItemAnimator(new MyItemAnimator(MainActivity.this));
                                     rvProjectList.setAdapter(projectAdapter);
 
                                 }
