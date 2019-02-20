@@ -1,14 +1,12 @@
 package com.bytebucket1111.progressmeter.activities;
 
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,14 +26,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AddProjectDialog.AddProjectListener {
 
-    //comfirmation before exit
-    private boolean appExit=false;
     String TAG = "hello";
-    private FloatingActionButton fabAddProject;
     DatabaseReference dbRefProjects = FirebaseDatabase.getInstance().getReference("Projects");
     DatabaseReference dbRefContractors = FirebaseDatabase.getInstance().getReference("Contractors");
-    private String userId;
     ArrayList<Project> projects = new ArrayList<>();
+    //comfirmation before exit
+    private boolean appExit = false;
+    private FloatingActionButton fabAddProject;
+    private String userId;
     private RecyclerView rvProjectList;
     private ProjectAdapter projectAdapter;
 
@@ -54,36 +52,32 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
         rvProjectList = findViewById(R.id.main_project_recycler_view);
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
         if (acct != null) {
-            String personName = acct.getDisplayName();
             userId = acct.getId();
         }
 
         fetchProjects();
 
-
     }
 
     private void fetchProjects() {
-        dbRefContractors.child(userId).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRefContractors.child(userId).child("projectIds").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final ArrayList<String> projectNames = (ArrayList<String>) dataSnapshot.getValue();
                 projects.clear();
-                for (int i = 1;i<projectNames.size();i++)
-                {
-
-                        //final Project[] project = new Project[1];
-                    final int finalI = i;
-                    dbRefProjects.child(projectNames.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                long i = 0;
+                final long childCount = dataSnapshot.getChildrenCount();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String str = ds.getValue(String.class);
+                    i++;
+                    final long I = i;
+                    if (!str.equalsIgnoreCase("dummy")) {
+                        dbRefProjects.child(str).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Project project = dataSnapshot.getValue(Project.class);
-                                Log.d(TAG, "title: "+project.getTitle());
                                 projects.add(project);
-                                Log.d(TAG, "size: "+projects.size());
-                                if(finalI ==projectNames.size()-1)
-                                {
-                                    projectAdapter = new ProjectAdapter(projects,MainActivity.this);
+                                if (I == childCount - 1) {
+                                    projectAdapter = new ProjectAdapter(projects, MainActivity.this);
                                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
                                     rvProjectList.setAdapter(projectAdapter);
                                     rvProjectList.setLayoutManager(linearLayoutManager);
@@ -95,13 +89,8 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
 
                             }
                         });
-
-                        //projects.add(project[0]);
-                        //Log.d(TAG, "size1: "+projects.size());
-
+                    }
                 }
-                Log.d("hello", "rv created: "+projects.size());
-
             }
 
             @Override
@@ -109,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
 
             }
         });
-
 
 
     }
@@ -122,11 +110,10 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     //waits for three seconds incase back is pressed again before the 3 second timer expires app exits.
     @Override
     public void onBackPressed() {
-        if(appExit){
+        if (appExit) {
             System.gc();
             System.exit(0);
-        }
-        else {
+        } else {
             Toast.makeText(this, "Press Back again to Exit.",
                     Toast.LENGTH_SHORT).show();
             appExit = true;
@@ -143,14 +130,14 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     public void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration) {
         Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
         final String projectKey = dbRefProjects.push().getKey();
-        ArrayList<String>updateList = new ArrayList<>();
+        ArrayList<String> updateList = new ArrayList<>();
         updateList.add("dummy");
-        Project project = new Project(title,desc,geolocation,startDate,duration,userId,updateList);
+        Project project = new Project(title, desc, geolocation, startDate, duration, userId, updateList);
         dbRefProjects.child(projectKey).setValue(project);
         dbRefContractors.child(userId).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String>  project = (ArrayList<String>) dataSnapshot.getValue();
+                ArrayList<String> project = (ArrayList<String>) dataSnapshot.getValue();
                 String id = project.size() + "";
                 dbRefContractors.child(userId).child("projectIds").child(id).setValue(projectKey);
             }

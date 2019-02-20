@@ -10,11 +10,9 @@ import android.widget.TextView;
 
 import com.bytebucket1111.progressmeter.modal.Project;
 
-
-
 import java.util.ArrayList;
 
-public class ProjectAdapter extends RecyclerView.Adapter<MyViewHolder>{
+public class ProjectAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     ArrayList<Project> projects;
     Context context;
@@ -27,7 +25,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<MyViewHolder>{
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_project_layout,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_project_layout, viewGroup, false);
 
         return new MyViewHolder(view);
     }
@@ -47,9 +45,10 @@ public class ProjectAdapter extends RecyclerView.Adapter<MyViewHolder>{
     }
 }
 
-class MyViewHolder extends RecyclerView.ViewHolder{
+class MyViewHolder extends RecyclerView.ViewHolder {
 
     TextView tvTitle, tvStart, tvDuration;
+
     public MyViewHolder(@NonNull View itemView) {
         super(itemView);
         tvTitle = itemView.findViewById(R.id.item_project_layout_projectname);
