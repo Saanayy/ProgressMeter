@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bytebucket1111.progressmeter.AddProjectDialog;
+import com.bytebucket1111.progressmeter.MyItemAnimator;
 import com.bytebucket1111.progressmeter.ProjectAdapter;
 import com.bytebucket1111.progressmeter.R;
 import com.bytebucket1111.progressmeter.modal.Project;
@@ -64,29 +65,36 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     }
 
     private void fetchProjects() {
-        dbRefContractors.child(userId).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRefContractors.child(userId).child("projectIds").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final ArrayList<String> projectNames = (ArrayList<String>) dataSnapshot.getValue();
                 projects.clear();
-                for (int i = 1;i<projectNames.size();i++)
-                {
-
-                        //final Project[] project = new Project[1];
-                    final int finalI = i;
-                    dbRefProjects.child(projectNames.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                long i = 0;
+                final long childCount = dataSnapshot.getChildrenCount();
+                Log.d(TAG,"CC:"+childCount);
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String str = ds.getValue(String.class);
+                    Log.d(TAG,"str"+i+str);
+                    i++;
+                    final long I = i;
+                    if (!str.equals("dummy")) {
+                        dbRefProjects.child(str).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Project project = dataSnapshot.getValue(Project.class);
-                                Log.d(TAG, "title: "+project.getTitle());
+                                Log.d(TAG,"pt:"+I+project.getTitle());
                                 projects.add(project);
-                                Log.d(TAG, "size: "+projects.size());
-                                if(finalI ==projectNames.size()-1)
-                                {
-                                    projectAdapter = new ProjectAdapter(projects,MainActivity.this);
+                                if (I == childCount) {
+                                    Log.d(TAG,"Ps:"+projects.size());
+                                    projectAdapter = new ProjectAdapter(projects, MainActivity.this);
                                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-                                    rvProjectList.setAdapter(projectAdapter);
+                                    linearLayoutManager.setReverseLayout(true);
+
                                     rvProjectList.setLayoutManager(linearLayoutManager);
+                                    rvProjectList.scrollToPosition(projects.size()-1);
+                                    rvProjectList.setItemAnimator(new MyItemAnimator(MainActivity.this));
+                                    rvProjectList.setAdapter(projectAdapter);
+
                                 }
                             }
 
@@ -95,13 +103,8 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
 
                             }
                         });
-
-                        //projects.add(project[0]);
-                        //Log.d(TAG, "size1: "+projects.size());
-
+                    }
                 }
-                Log.d("hello", "rv created: "+projects.size());
-
             }
 
             @Override
@@ -109,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
 
             }
         });
-
 
 
     }

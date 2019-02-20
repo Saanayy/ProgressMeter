@@ -30,7 +30,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.DatabaseCheckActivity" />
-        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.ManageProject" android:parentActivityName=".activities.MainActivity">
+
+        </activity>
     </application>
 
 </manifest>
