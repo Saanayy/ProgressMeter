@@ -5,7 +5,7 @@ import android.app.Application;
 import com.onesignal.OneSignal;
 
 public class ApplicationClass extends Application {
-
+//Class for OneSignal notifications
     @Override
     public void onCreate() {
         super.onCreate();
