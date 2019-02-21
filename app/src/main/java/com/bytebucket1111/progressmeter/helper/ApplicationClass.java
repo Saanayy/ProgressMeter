@@ -1,4 +1,4 @@
-package com.bytebucket1111.progressmeter;
+package com.bytebucket1111.progressmeter.helper;
 
 import android.app.Application;
 

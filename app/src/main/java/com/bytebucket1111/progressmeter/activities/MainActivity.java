@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.bytebucket1111.progressmeter.AddProjectDialog;
 import com.bytebucket1111.progressmeter.R;
 
 public class MainActivity extends AppCompatActivity implements AddProjectDialog.AddProjectListener {
