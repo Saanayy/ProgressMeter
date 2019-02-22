@@ -54,6 +54,10 @@
                         android:id="@+id/create_project_geolocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:focusableInTouchMode="false"
                         android:hint="Geolocation"
                         />
                 </android.support.design.widget.TextInputLayout>
