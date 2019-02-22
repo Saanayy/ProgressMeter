@@ -1,6 +1,7 @@
 package com.bytebucket1111.progressmeter.activities;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,15 +12,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.DatePicker;
 
 import com.bytebucket1111.progressmeter.R;
 import com.bytebucket1111.progressmeter.activities.LocationPickerActivity;
 import com.bytebucket1111.progressmeter.modal.Place;
 
+import java.util.Calendar;
+
 public class AddProjectDialog extends AppCompatDialogFragment implements View.OnClickListener {
 
     private TextInputEditText inputEditTextTitle,inputEditTextDesc,inputEditTextGeolocation,inputEditTextStartDate, inputEditTextDuration;
     private AddProjectListener listener;
+    private int mYear, mMonth, mDay;
     int GEO_LOCATION_REQUEST_CODE = 123;
 
     @Override
@@ -35,6 +40,30 @@ public class AddProjectDialog extends AppCompatDialogFragment implements View.On
         inputEditTextDuration = view.findViewById(R.id.create_project_duration);
 
         inputEditTextGeolocation.setOnClickListener(this);
+
+        inputEditTextStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                inputEditTextStartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
 
         builder.setView(view)
                 .setTitle("Add Project Details")

@@ -1,14 +1,12 @@
 package com.bytebucket1111.progressmeter.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bytebucket1111.progressmeter.AddProjectDialog;
 import com.bytebucket1111.progressmeter.ProjectInfoDialog;
 import com.bytebucket1111.progressmeter.R;
 import com.bytebucket1111.progressmeter.modal.Project;
@@ -20,6 +18,7 @@ import java.lang.reflect.Type;
 public class ManageProject extends AppCompatActivity implements ProjectInfoDialog.ShowProjectInfoListener {
 
     private Project currentProject;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -52,8 +51,9 @@ public class ManageProject extends AppCompatActivity implements ProjectInfoDialo
         Bundle bundle = getIntent().getExtras();
         String projectData = bundle.getString("projectData");
         Gson gson = new Gson();
-        Type type = new TypeToken<Project>(){}.getType();
-        Project currentProjectData = gson.fromJson(projectData,type);
+        Type type = new TypeToken<Project>() {
+        }.getType();
+        Project currentProjectData = gson.fromJson(projectData, type);
         currentProject = currentProjectData;
 
     }
