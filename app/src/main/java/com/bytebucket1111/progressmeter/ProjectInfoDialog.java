@@ -30,19 +30,13 @@ public class ProjectInfoDialog extends DialogFragment {
         listener.showProjectDetails(tvTitle, tvDescription, tvGeolocation, tvStartDate, tvDuration);
 
         builder.setView(view)
-                .setTitle("Project Info")
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                })
                 .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
+
 
         return builder.create();
     }

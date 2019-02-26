@@ -78,10 +78,10 @@ public class AddProjectDialog extends AppCompatDialogFragment implements View.On
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String title = inputEditTextTitle.getText().toString();
-                        String description = inputEditTextTitle.getText().toString();
-                        String geolocation = inputEditTextTitle.getText().toString();
-                        String startDate = inputEditTextTitle.getText().toString();
-                        String duration = inputEditTextTitle.getText().toString();
+                        String description = inputEditTextDesc.getText().toString();
+                        String geolocation = inputEditTextGeolocation.getText().toString();
+                        String startDate = inputEditTextStartDate.getText().toString();
+                        String duration = inputEditTextDuration.getText().toString();
                         listener.addProjectToFirebase(title, description,geolocation,startDate,duration);
                     }
                 });

@@ -38,6 +38,7 @@
         <activity android:name=".activities.LocationPickerActivity"
             android:theme="@style/NoActionBarTheme"
             ></activity>
+        <activity android:name=".activities.ManageProject" android:parentActivityName=".activities.MainActivity"></activity>
     </application>
 
 </manifest>

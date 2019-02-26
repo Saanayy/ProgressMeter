@@ -11,65 +11,86 @@
         android:layout_height="match_parent"
         app:cardCornerRadius="2dp"
         app:cardElevation="2dp">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/project_info_dialog_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:padding="2dp"
-                        android:layout_marginLeft="8dp"
-                        android:text="Title" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:text="Details"
+                android:fontFamily="@font/nunito_semibold"
+                android:gravity="center"
+                android:textSize="20sp"
 
-                    <TextView
-                        android:id="@+id/project_info_dialog_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:padding="2dp"
-                        android:layout_marginLeft="8dp"
-                        android:text="description" />
+                />
 
-                    <TextView
-                        android:id="@+id/project_info_dialog_geolocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:padding="2dp"
-                        android:layout_marginLeft="8dp"
-                        android:text="Geolocation" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginLeft="16dp"
+                android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/project_info_dialog_startdate"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:padding="2dp"
-                        android:layout_marginLeft="8dp"
-                        android:text="Start Date" />
+                <TextView
+                    android:id="@+id/project_info_dialog_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:text="Title"
 
-                    <TextView
-                        android:id="@+id/project_info_dialog_duration"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:padding="2dp"
-                        android:layout_marginLeft="8dp"
-                        android:text="Duration" />
+                    android:fontFamily="@font/nunito_semibold"/>
+
+                <TextView
+                    android:id="@+id/project_info_dialog_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:text="description" />
+
+                <TextView
+                    android:id="@+id/project_info_dialog_geolocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:text="Geolocation" />
+
+                <TextView
+                    android:id="@+id/project_info_dialog_startdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:text="Start Date" />
+
+                <TextView
+                    android:id="@+id/project_info_dialog_duration"
+                    android:layout_width="match_parent"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:text="Duration" />
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
 
-
-    </ScrollView>
     </android.support.v7.widget.CardView>
     
 

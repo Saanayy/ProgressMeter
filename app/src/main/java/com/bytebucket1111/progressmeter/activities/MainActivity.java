@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,12 +37,14 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     private String userId;
     private RecyclerView rvProjectList;
     private ProjectAdapter projectAdapter;
+    private android.support.design.widget.CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        coordinatorLayout = findViewById(R.id.cordinator);
         fabAddProject = findViewById(R.id.main_add_project);
         fabAddProject.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
         fetchProjects();
 
     }
+
     private void fetchProjects() {
         dbRefContractors.child(userId).child("projectIds").addValueEventListener(new ValueEventListener() {
             @Override
@@ -65,10 +69,10 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                 projects.clear();
                 long i = 0;
                 final long childCount = dataSnapshot.getChildrenCount();
-                Log.d(TAG,"CC:"+childCount);
+                Log.d(TAG, "CC:" + childCount);
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String str = ds.getValue(String.class);
-                    Log.d(TAG,"str"+i+str);
+                    Log.d(TAG, "str" + i + str);
                     i++;
                     final long I = i;
                     if (!str.equals("dummy")) {
@@ -76,14 +80,15 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Project project = dataSnapshot.getValue(Project.class);
-                                Log.d(TAG,"pt:"+I+project.getTitle());
-                                projects.add(project);
+                                Log.d(TAG, "pt:" + I + project.getTitle());
+                                projects.add(0,project);
                                 if (I == childCount) {
-                                    Log.d(TAG,"Ps:"+projects.size());
+                                    Log.d(TAG, "Ps:" + projects.size());
                                     projectAdapter = new ProjectAdapter(projects, MainActivity.this);
                                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
                                     rvProjectList.setAdapter(projectAdapter);
                                     rvProjectList.setLayoutManager(linearLayoutManager);
+                                    rvProjectList.scrollToPosition(0);
                                 }
                             }
 
@@ -131,8 +136,9 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
 
     @Override
     public void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration) {
-        Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
         final String projectKey = dbRefProjects.push().getKey();
+        Snackbar snackbar1 = Snackbar.make(coordinatorLayout, "Data Added", Snackbar.LENGTH_SHORT);
+        snackbar1.show();
         ArrayList<String> updateList = new ArrayList<>();
         updateList.add("dummy");
         Project project = new Project(title, desc, geolocation, startDate, duration, userId, updateList);
