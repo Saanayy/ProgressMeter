@@ -117,7 +117,7 @@ public class AddProjectDialog extends AppCompatDialogFragment implements View.On
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GEO_LOCATION_REQUEST_CODE  && resultCode == Activity.RESULT_OK){
             Place place = (Place) data.getSerializableExtra("place");
-            inputEditTextGeolocation.setText(place.getName() + " Lat:" + place.getLat() + " Lng:" + place.getLng());
+            inputEditTextGeolocation.setText("Lat:" + place.getLat() + " Lng:" + place.getLng());
         }
 
     }

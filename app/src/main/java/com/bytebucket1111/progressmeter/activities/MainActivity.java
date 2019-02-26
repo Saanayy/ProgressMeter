@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.bytebucket1111.progressmeter.ProjectAdapter;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     ArrayList<Project> projects = new ArrayList<>();
     //comfirmation before exit
     private boolean appExit = false;
-    private FloatingActionButton fabAddProject;
+    private ImageButton fabAddProject;
     private String userId;
     private RecyclerView rvProjectList;
     private ProjectAdapter projectAdapter;
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        coordinatorLayout = findViewById(R.id.cordinator);
         fabAddProject = findViewById(R.id.main_add_project);
         fabAddProject.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -35,10 +35,13 @@
         </activity>
         <activity android:name=".activities.DatabaseCheckActivity" />
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.LocationPickerActivity"
-            android:theme="@style/NoActionBarTheme"
-            ></activity>
-        <activity android:name=".activities.ManageProject" android:parentActivityName=".activities.MainActivity"></activity>
+        <activity
+            android:name=".activities.LocationPickerActivity"
+            android:theme="@style/NoActionBarTheme" />
+        <activity
+            android:name=".activities.ManageProject"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity android:name=".activities.UpdateActivity"></activity>
     </application>
 
 </manifest>

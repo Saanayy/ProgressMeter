@@ -270,7 +270,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                             MY_LOCATION = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                             newMarker = mMap.addMarker(new MarkerOptions()
                                     .position(MY_LOCATION)
-                                    .title("You are here"));
+                                    .title("Set")); //yaha
 
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
@@ -312,7 +312,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
                 @Override
                 public boolean onMyLocationButtonClick() {
-                    newMarker.setTitle("You are here");
+                    newMarker.setTitle("Set");
                     setCurrentLocation();
                     return false;
                 }
@@ -323,7 +323,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 public void onInfoWindowClick(Marker marker) {
                     if (marker.equals(newMarker)) {
                         if (newMarker.getTitle().charAt(0) == 'S'){
-                            String name = selectedPlace.isEmpty()?"Custom location": selectedPlace;
+
+                            String name =  selectedPlace;
                             Intent intent = new Intent();
                             com.bytebucket1111.progressmeter.modal.Place place = new com.bytebucket1111.progressmeter.modal.Place(name,
                                     marker.getPosition().latitude, marker.getPosition().longitude);

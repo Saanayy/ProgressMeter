@@ -11,6 +11,7 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
+            android:theme="@style/Base.Theme.AppCompat.Light"
             android:layout_width="match_parent"
             android:layout_height="50dp">
 
@@ -27,6 +28,7 @@
                     />
 
                 <fragment
+
                     android:id="@+id/autocomplete_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
