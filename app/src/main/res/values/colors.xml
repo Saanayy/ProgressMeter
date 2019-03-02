@@ -6,4 +6,7 @@
     <color name="colorSecondaryDark">#f57f17</color>
     <color name="colorPrimaryLight">#4A6572</color>
     <color name="colorAccent">#F9AA33</color>
+    <color name="startblue"> #09c6df</color>
+    <color name="endblue"> #0bcce6</color>
+    <color name="graylight"> #fafafa</color>
 </resources>

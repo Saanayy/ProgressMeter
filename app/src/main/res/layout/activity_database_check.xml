@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.DatabaseCheckActivity">
 
     <LinearLayout
@@ -10,42 +11,86 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:padding="8dp"
+        android:gravity="center">
 
-        <EditText
-            android:id="@+id/et_name"
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/dbcheck_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:hint="name" />
+            app:errorEnabled="true"
+            style="@style/TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Name"/>
 
-        <EditText
-            android:id="@+id/et_cid"
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/dbcheck_cid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:hint="cid" />
+            style="@style/TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_cid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Contractor ID"/>
 
-        <EditText
-            android:id="@+id/et_contact"
+
+        </android.support.design.widget.TextInputLayout>
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/dbcheck_contact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:hint="contact" />
 
-        <EditText
-            android:id="@+id/et_address"
+            style="@style/TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="phone"
+                android:id="@+id/et_contact"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Contact Number"/>
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/dbcheck_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:hint="address" />
+
+            style="@style/TextInputLayout">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Address"/>
+
+
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/bt_submit"
-            android:layout_width="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Submit" />
+            android:text="Submit"
+            android:background="@drawable/buttonstyle"
+            />
 
     </LinearLayout>
 
@@ -54,5 +99,44 @@
         android:layout_height="24dp"
         android:id="@+id/progress_bar"
         android:layout_centerInParent="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:id="@+id/database_check_passcode_linearlayout"
+
+        >
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dbcheck_passcodeverify"
+            style="@style/TextInputLayout"
+            android:layout_margin="8dp"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/database_check_passcode"
+                android:hint="Enter the contractor passcode"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/db_check_verifiy"
+            android:text="Verify"
+            android:layout_gravity="right"
+            android:layout_marginRight="32dp"
+            android:background="@drawable/buttonstyle"
+            android:textAllCaps="false"
+            android:fontFamily="@font/nunito_semibold"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

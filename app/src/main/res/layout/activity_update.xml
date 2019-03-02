@@ -166,10 +166,12 @@
         android:id="@+id/update_addupdate"
         android:text="Create the Update"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/text"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Image"
+        android:id="@+id/take_image"
+        />
 
 
 </LinearLayout>

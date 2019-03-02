@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Project {
 
-    public String title, description, geolocation,startDate,duration,userid;
-    public ArrayList<String>updateId;
+    public String title, description, geolocation, startDate, duration, userid;
+    public ArrayList<String> updateId;
 
     public Project() {
     }

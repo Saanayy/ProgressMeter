@@ -1,5 +1,6 @@
 package com.bytebucket1111.progressmeter.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -9,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -39,6 +43,27 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     private RecyclerView rvProjectList;
     private ProjectAdapter projectAdapter;
     private android.support.design.widget.CoordinatorLayout coordinatorLayout;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.show_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.profile_data:
+                Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(profileIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,8 +162,6 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     @Override
     public void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration) {
         final String projectKey = dbRefProjects.push().getKey();
-        Snackbar snackbar1 = Snackbar.make(coordinatorLayout, "Data Added", Snackbar.LENGTH_SHORT);
-        snackbar1.show();
         ArrayList<String> updateList = new ArrayList<>();
         updateList.add("dummy");
         Project project = new Project(title, desc, geolocation, startDate, duration, userId, updateList);
