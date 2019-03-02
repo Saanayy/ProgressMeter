@@ -5,14 +5,72 @@
     android:layout_height="match_parent"
     tools:context=".activities.ManageProject">
 
-
     <Button
-        android:id="@+id/manage_project_addupdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="4dp"
         android:text="Add Update"
-        android:textAllCaps="false"/>
+        android:id="@+id/manage_project_addupdate"
+        android:layout_alignParentBottom="true"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rv_updates"
+        android:layout_above="@id/manage_project_addupdate">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rv_updates"
+        android:orientation="vertical"
+        android:weightSum="6">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="Title"
+            android:gravity="center"
+            android:textSize="48sp"
+            android:layout_weight="2"
+            android:id="@+id/manage_title"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="description"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:layout_weight="1"
+            android:id="@+id/manage_description"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="Geolocation"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:layout_weight="1"
+            android:id="@+id/manage_geolocation"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/manage_startdate"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:layout_weight="1"
+            android:text="StartDate"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/manage_duration"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:layout_weight="1"
+            android:text="Duration"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>

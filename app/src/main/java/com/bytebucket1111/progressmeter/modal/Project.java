@@ -4,20 +4,27 @@ import java.util.ArrayList;
 
 public class Project {
 
-    public String title, description, geolocation, startDate, duration, userid;
+    public String title, description, geolocation, startDate, duration, userid,projectId;
     public ArrayList<String> updateId;
+    public boolean finished;
+
+
 
     public Project() {
     }
 
-    public Project(String title, String description, String geolocation, String startDate, String duration, String userid, ArrayList<String> updateId) {
+
+
+    public Project(String title, String description, String geolocation, String startDate, String duration, String userid, String projectId, ArrayList<String> updateId, boolean finished) {
         this.title = title;
         this.description = description;
         this.geolocation = geolocation;
         this.startDate = startDate;
         this.duration = duration;
         this.userid = userid;
+        this.projectId = projectId;
         this.updateId = updateId;
+        this.finished = finished;
     }
 
     public String getUserid() {
@@ -74,5 +81,21 @@ public class Project {
 
     public void setUpdateId(ArrayList<String> updateId) {
         this.updateId = updateId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 }

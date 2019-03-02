@@ -37,8 +37,7 @@
         <activity android:name=".activities.DatabaseCheckActivity" />
         <activity android:name=".activities.MainActivity" />
         <activity
-            android:name=".activities.LocationPickerActivity"
-            android:theme="@style/NoActionBarTheme" />
+            android:name=".activities.LocationPickerActivity"/>
         <activity
             android:name=".activities.ManageProject"
             android:parentActivityName=".activities.MainActivity" />

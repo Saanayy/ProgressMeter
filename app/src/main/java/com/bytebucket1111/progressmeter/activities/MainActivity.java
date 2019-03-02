@@ -162,10 +162,12 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     @Override
     public void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration) {
         final String projectKey = dbRefProjects.push().getKey();
+        Log.d(TAG, "addProjectToFirebase: "+projectKey);
         ArrayList<String> updateList = new ArrayList<>();
         updateList.add("dummy");
-        Project project = new Project(title, desc, geolocation, startDate, duration, userId, updateList);
+        Project project = new Project(title, desc, geolocation, startDate, duration, userId, projectKey, updateList,false);
         dbRefProjects.child(projectKey).setValue(project);
+        //dbRefProjects.setValue(null);
         dbRefContractors.child(userId).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

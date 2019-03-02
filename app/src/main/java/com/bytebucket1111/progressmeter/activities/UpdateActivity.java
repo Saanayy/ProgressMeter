@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,7 +21,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +35,17 @@ import com.bytebucket1111.progressmeter.R;
 import com.bytebucket1111.progressmeter.Utilites;
 import com.bytebucket1111.progressmeter.helper.NotificationHelper;
 import com.bytebucket1111.progressmeter.modal.Project;
+import com.bytebucket1111.progressmeter.modal.Update;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vinaygaba.rubberstamp.RubberStamp;
@@ -64,6 +75,13 @@ public class UpdateActivity extends AppCompatActivity {
     TextView textView;
     int weatherId = 007;
     Project currentProject;
+    Spinner weatherSpinner, workSpinner;
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    String imagePath ="none";
+
+    DatabaseReference projectRef = FirebaseDatabase.getInstance().getReference("Projects");
+    DatabaseReference updateRef = FirebaseDatabase.getInstance().getReference("Updates");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +95,8 @@ public class UpdateActivity extends AppCompatActivity {
         takeImage = findViewById(R.id.take_image);
 
         //External storage request
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_PERMISSION);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
         }
 
         takeImage.setOnClickListener(new View.OnClickListener() {
@@ -91,9 +109,8 @@ public class UpdateActivity extends AppCompatActivity {
 
 
         //Notification Checker
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            NotificationChannel notificationChannel = new NotificationChannel("channelId","channelId", NotificationManager.IMPORTANCE_DEFAULT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("channelId", "channelId", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(notificationChannel);
         }
@@ -101,14 +118,13 @@ public class UpdateActivity extends AppCompatActivity {
         String body = "Bhagg be KamChor";
 
 
-
-        final Spinner weatherSpinner = (Spinner) findViewById(R.id.update_spinnerweather);
+        weatherSpinner = (Spinner) findViewById(R.id.update_spinnerweather);
         String[] weather = {"Clear Sky", "Snow", "Rain", "Drizzle", "Thunder Storm"};
         ArrayAdapter<CharSequence> spinAdapter = new ArrayAdapter<CharSequence>(UpdateActivity.this, R.layout.spinner_text, weather);
         spinAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
         weatherSpinner.setAdapter(spinAdapter);
 
-        Spinner workSpinner = (Spinner) findViewById(R.id.update_spinnerwork);
+        workSpinner = (Spinner) findViewById(R.id.update_spinnerwork);
         String[] work = {"InProgress", "Slowed", "Stopped"};
         spinAdapter = new ArrayAdapter<CharSequence>(UpdateActivity.this, R.layout.spinner_text, work);
         spinAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
@@ -116,9 +132,10 @@ public class UpdateActivity extends AppCompatActivity {
 
 
         Bundle bundle = getIntent().getExtras();
-        String projectData = bundle.getString("projectData");
+        final String projectData = bundle.getString("projectData");
         Gson gson = new Gson();
-        Type type = new TypeToken<Project>() {}.getType();
+        Type type = new TypeToken<Project>() {
+        }.getType();
         final Project currentProjectData = gson.fromJson(projectData, type);
         currentProject = currentProjectData;
 
@@ -146,7 +163,6 @@ public class UpdateActivity extends AppCompatActivity {
                 datePickerDialog.show();
 
 
-
             }
         });
 
@@ -158,20 +174,21 @@ public class UpdateActivity extends AppCompatActivity {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-
-                                if(response!=null)
-                                {
+                                if (response != null) {
                                     try {
                                         JSONObject root = new JSONObject(response);
-                                        JSONArray weather = root.getJSONArray("weather");
-                                        JSONObject jsonObject = weather.getJSONObject(0);
+                                        JSONArray jsonWeather = root.getJSONArray("weather");
+                                        JSONObject jsonObject = jsonWeather.getJSONObject(0);
                                         weatherId = jsonObject.getInt("id");
 
-                                        Toast.makeText(UpdateActivity.this, ""+weatherId, Toast.LENGTH_SHORT).show();
-                                        String title = "Lo Naya Notification";
-                                        String body = "Bhagg be KamChor";
-                                        if(weatherSpinner.getSelectedItem().toString().equalsIgnoreCase(Utilites.getWeatherString(weatherId)) == false)
-                                            NotificationHelper.displayNotification(UpdateActivity.this,title,body);
+                                        Toast.makeText(UpdateActivity.this, "" + weatherId, Toast.LENGTH_SHORT).show();
+                                        String notiTitle = "Lo Naya Notification";
+                                        String notiBody = "New Notification";
+                                        if (weatherSpinner.getSelectedItem().toString().equalsIgnoreCase(Utilites.getWeatherString(weatherId)) == false)
+                                            NotificationHelper.displayNotification(UpdateActivity.this, notiTitle, notiBody);
+
+                                        pushUpdates();
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -189,18 +206,92 @@ public class UpdateActivity extends AppCompatActivity {
 // Add the request to the RequestQueue.
                 queue.add(stringRequest);
             }
+
+
         });
 
 
     }
 
-    @Override
-    protected void onActivityResult(int reqCode, int resCode, Intent data)
-    {
-        super.onActivityResult(reqCode,resCode,data);
-        if(resCode == RESULT_OK && reqCode ==REQUEST_CODE)
+    private void pushUpdates() {
+        //Pushing the Update
+        String title = etProjectName.getText().toString().trim();
+        String location = etLocation.getText().toString().trim();
+        String desc = "This is a description";
+        String imageUrl = "none";
+        String isStopped = workSpinner.getSelectedItem().toString();
+        String weather = weatherSpinner.getSelectedItem().toString();
+        String date = etDate.getText().toString().trim();
+        final String updateKey = updateRef.push().getKey().toString();
+        String apiWeather = Utilites.getWeatherString(weatherId);
+
+        if(!imagePath.equalsIgnoreCase("none"))
         {
-            Bitmap bitmap =(Bitmap) data.getExtras().get("data");
+            pushImagetoStorage(title,desc,imageUrl,isStopped,weather,date,apiWeather,location,updateKey);
+        }
+        else {
+            Update update = new Update(title, desc, imageUrl, isStopped, weather, date, apiWeather, location);
+            updateRef.child(updateKey).setValue(update);
+            projectRef.child(currentProject.getProjectId()).child("updateId").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    long id = dataSnapshot.getChildrenCount();
+                    projectRef.child(currentProject.getProjectId()).child("updateId").child(id + "").setValue(updateKey);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    private void pushImagetoStorage(final String title, final String desc, final String imageUrl, final String isStopped, final String weather, final String date, final String apiWeather, final String location,final String updateKey) {
+        Uri file = Uri.fromFile(new File(imagePath));
+        final StorageReference imagesRef = storageRef.child("images/"+file.getLastPathSegment());
+        UploadTask uploadTask = imagesRef.putFile(file);
+// Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+                imagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String imageUrl1 = uri.toString();
+                        Update update = new Update(title, desc, imageUrl1, isStopped, weather, date, apiWeather, location);
+                        updateRef.child(updateKey).setValue(update);
+
+                        projectRef.child(currentProject.getProjectId()).child("updateId").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                long id = dataSnapshot.getChildrenCount();
+                                projectRef.child(currentProject.getProjectId()).child("updateId").child(id + "").setValue(updateKey);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
+        super.onActivityResult(reqCode, resCode, data);
+        if (resCode == RESULT_OK && reqCode == REQUEST_CODE) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
             watermarker(bitmap);
         }
     }
@@ -223,11 +314,12 @@ public class UpdateActivity extends AppCompatActivity {
         //ImageView imageView = findViewById(R.id.img_view);
         //imageView.setImageBitmap(b);
 
-        String dirPath = Environment.getExternalStorageDirectory()+"/Progress Meter";
+        String dirPath = Environment.getExternalStorageDirectory() + "/Progress Meter";
         File dirFile = new File(dirPath);
-        if(!dirFile.exists())
+        if (!dirFile.exists())
             dirFile.mkdir();
-        String path = Environment.getExternalStorageDirectory().toString()+"/"+"Progress Meter"+"/"+ UUID.randomUUID().toString()+".jpg";
+        String path = Environment.getExternalStorageDirectory().toString() + "/" + "Progress Meter" + "/" + UUID.randomUUID().toString() + ".jpg";
+        imagePath = path;
         File file = new File(path);
         try {
             FileOutputStream out = new FileOutputStream(file);
@@ -236,7 +328,7 @@ public class UpdateActivity extends AppCompatActivity {
             out.close();
 
         } catch (Exception e) {
-            Log.e("file error",e+"");
+            Log.e("file error", e + "");
             e.printStackTrace();
         }
     }
@@ -244,9 +336,8 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(grantResults[0] != PackageManager.PERMISSION_GRANTED)
-        {
-            Toast.makeText(this,"You did not give write external storage permission ",Toast.LENGTH_SHORT).show();
+        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "You did not give write external storage permission ", Toast.LENGTH_SHORT).show();
             finish();
         }
     }

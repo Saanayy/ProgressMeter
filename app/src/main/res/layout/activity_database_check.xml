@@ -54,12 +54,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-
             style="@style/TextInputLayout">
             <android.support.design.widget.TextInputEditText
                 android:inputType="phone"
                 android:id="@+id/et_contact"
                 android:layout_width="match_parent"
+                android:drawableRight="@drawable/ic_person_outline_black_24dp"
+                android:drawableTint="@color/colorPrimary"
                 android:layout_height="match_parent"
                 android:hint="Contact Number"/>
 
@@ -136,6 +137,7 @@
             android:background="@drawable/buttonstyle"
             android:textAllCaps="false"
             android:fontFamily="@font/nunito_semibold"/>
+
 
     </LinearLayout>
 

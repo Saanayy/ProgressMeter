@@ -2,17 +2,22 @@ package com.bytebucket1111.progressmeter.modal;
 
 public class Update {
 
-    String title, desc, imageUrl,isStopped,weather;
-
+    String title, desc, imageUrl,isStopped,userweather,date;
+    String apiWeather, location;
+    boolean resolved, conflict;
     public Update() {
     }
 
-    public Update(String title, String desc, String imageUrl, String isStopped, String weather) {
+
+    public Update(String title, String desc, String imageUrl, String isStopped, String userweather, String date, String apiWeather, String location) {
         this.title = title;
         this.desc = desc;
         this.imageUrl = imageUrl;
         this.isStopped = isStopped;
-        this.weather = weather;
+        this.userweather = userweather;
+        this.date = date;
+        this.apiWeather = apiWeather;
+        this.location = location;
     }
 
     public String getTitle() {
@@ -47,11 +52,35 @@ public class Update {
         this.isStopped = isStopped;
     }
 
-    public String getWeather() {
-        return weather;
+    public String getUserweather() {
+        return userweather;
     }
 
-    public void setWeather(String weather) {
-        this.weather = weather;
+    public void setUserweather(String userweather) {
+        this.userweather = userweather;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getApiWeather() {
+        return apiWeather;
+    }
+
+    public void setApiWeather(String apiWeather) {
+        this.apiWeather = apiWeather;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
