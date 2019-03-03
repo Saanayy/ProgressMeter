@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Progress Meter</string>
+    <string name="app_name">Pragati</string>
+    <string name="AboutUs">This app connects the Ministry of Road Transport and Highways,open body for formulation and administartion of rules, regulations and laws relating to road transport, to the contractor who undertake road construction projects. Users can upload their project along with details and notify the Ministry of all the updates related to any hinderance in the construction work. Information of their projects can be seen in profile section. This app ensures that contractors and ministry can work in tandem and gets best results for development and maintenance of National Highways and Roads in the country. </string>
+
 </resources>

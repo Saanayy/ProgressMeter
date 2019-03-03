@@ -35,8 +35,16 @@ public class UpdateAdapter extends RecyclerView.Adapter<UpdateAdapter.MyViewHold
         Update update = updates.get(i);
         myViewHolder2.tvName.setText(update.getTitle());
         myViewHolder2.tvDate.setText(update.getDate());
-        myViewHolder2.tvDesc.setText(update.getDesc());
-        //color work remianing
+        myViewHolder2.tvDesc.setText(update.getUserweather());
+        if(!update.isResolved())
+            myViewHolder2.iv1.setImageResource(R.drawable.ic_notconflict);
+        else
+        {
+            if(update.isConflict())
+                myViewHolder2.iv1.setImageResource(R.drawable.ic_notresolved);
+            else
+                myViewHolder2.iv1.setImageResource(R.drawable.ic_resolved);
+        }
     }
 
     @Override
@@ -48,7 +56,7 @@ public class UpdateAdapter extends RecyclerView.Adapter<UpdateAdapter.MyViewHold
     class MyViewHolder2 extends RecyclerView.ViewHolder {
 
         TextView tvName, tvDate, tvDesc;
-        ImageView iv1, iv2, iv3;
+        ImageView iv1, iv2;
 
         public MyViewHolder2(@NonNull View itemView) {
             super(itemView);
@@ -56,8 +64,6 @@ public class UpdateAdapter extends RecyclerView.Adapter<UpdateAdapter.MyViewHold
             tvDate = itemView.findViewById(R.id.update_item_date);
             tvDesc = itemView.findViewById(R.id.update_item_desc);
             iv1 = itemView.findViewById(R.id.update_item_iv1);
-            iv2 = itemView.findViewById(R.id.update_item_iv2);
-            iv3 = itemView.findViewById(R.id.update_item_iv3);
 
         }
     }

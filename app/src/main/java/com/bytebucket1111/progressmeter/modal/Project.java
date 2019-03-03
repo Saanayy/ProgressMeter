@@ -1,5 +1,6 @@
 package com.bytebucket1111.progressmeter.modal;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Project {
@@ -7,8 +8,6 @@ public class Project {
     public String title, description, geolocation, startDate, duration, userid,projectId;
     public ArrayList<String> updateId;
     public boolean finished;
-
-
 
     public Project() {
     }

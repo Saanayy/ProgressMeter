@@ -15,17 +15,17 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import com.bytebucket1111.progressmeter.R;
-import com.bytebucket1111.progressmeter.activities.LocationPickerActivity;
 import com.bytebucket1111.progressmeter.modal.Place;
 
 import java.util.Calendar;
 
 public class AddProjectDialog extends AppCompatDialogFragment implements View.OnClickListener {
 
-    private TextInputEditText inputEditTextTitle,inputEditTextDesc,inputEditTextGeolocation,inputEditTextStartDate, inputEditTextDuration;
+    int GEO_LOCATION_REQUEST_CODE = 123;
+    private TextInputEditText inputEditTextTitle, inputEditTextDesc, inputEditTextGeolocation, inputEditTextStartDate, inputEditTextDuration;
     private AddProjectListener listener;
     private int mYear, mMonth, mDay;
-    int GEO_LOCATION_REQUEST_CODE = 123;
+    private android.support.design.widget.TextInputLayout iltitle,ildesc,ilgeo,ilstart,ilduration;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -38,6 +38,13 @@ public class AddProjectDialog extends AppCompatDialogFragment implements View.On
         inputEditTextGeolocation = view.findViewById(R.id.create_project_geolocation);
         inputEditTextStartDate = view.findViewById(R.id.create_project_start_date);
         inputEditTextDuration = view.findViewById(R.id.create_project_duration);
+
+
+        iltitle = view.findViewById(R.id.create_project_title_il);
+        ildesc = view.findViewById(R.id.create_project_desc_il);
+        ilgeo = view.findViewById(R.id.create_project_geolocation_il);
+        ilstart = view.findViewById(R.id.create_project_date_il);
+        ilduration = view.findViewById(R.id.create_project_duration_il);
 
         inputEditTextGeolocation.setOnClickListener(this);
 
@@ -82,7 +89,11 @@ public class AddProjectDialog extends AppCompatDialogFragment implements View.On
                         String geolocation = inputEditTextGeolocation.getText().toString();
                         String startDate = inputEditTextStartDate.getText().toString();
                         String duration = inputEditTextDuration.getText().toString();
-                        listener.addProjectToFirebase(title, description,geolocation,startDate,duration);
+
+                        boolean flag =  validate(title,description,geolocation,startDate,duration);
+
+                        if(flag)
+                        listener.addProjectToFirebase(title, description, geolocation, startDate, duration);
                     }
                 });
 
@@ -103,22 +114,54 @@ public class AddProjectDialog extends AppCompatDialogFragment implements View.On
 
     @Override
     public void onClick(View view) {
-        if(view == inputEditTextGeolocation){
+        if (view == inputEditTextGeolocation) {
             startActivityForResult(new Intent(getActivity(), LocationPickerActivity.class), GEO_LOCATION_REQUEST_CODE);
         }
-    }
-
-    public interface AddProjectListener {
-        void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GEO_LOCATION_REQUEST_CODE  && resultCode == Activity.RESULT_OK){
+        if (requestCode == GEO_LOCATION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Place place = (Place) data.getSerializableExtra("place");
             inputEditTextGeolocation.setText("Lat:" + place.getLat() + " Lng:" + place.getLng());
         }
 
+    }
+    private boolean validate(String title, String description, String geolocation, String startDate, String duration) {
+
+        boolean flag = true;
+        if(title.equalsIgnoreCase(""))
+        {
+            flag = false;
+            iltitle.setError("Manadatory Field");
+        }
+        if(description.equalsIgnoreCase(""))
+        {
+            flag = false;
+            ildesc.setError("Manadatory Field");
+        }
+        if(geolocation.equalsIgnoreCase(""))
+        {
+            flag = false;
+            ilgeo.setError("Manadatory Field");
+        }
+        if(startDate.equalsIgnoreCase(""))
+        {
+            flag = false;
+            ilstart.setError("Manadatory Field");
+        }
+        if(duration.equalsIgnoreCase(""))
+        {
+            flag = false;
+            ilduration.setError("Mandatory Field");
+        }
+
+
+        return flag;
+    }
+
+    public interface AddProjectListener {
+        void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration);
     }
 }

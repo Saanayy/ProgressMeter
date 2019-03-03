@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.bytebucket1111.progressmeter.activities.MainActivity;
 import com.bytebucket1111.progressmeter.activities.ManageProject;
 import com.bytebucket1111.progressmeter.modal.Project;
 import com.google.gson.Gson;
@@ -41,7 +42,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<MyViewHolder> {
         final Project project = projects.get(i);
         myViewHolder.tvTitle.setText(project.getTitle());
         myViewHolder.tvStart.setText(project.getStartDate());
-        myViewHolder.tvDuration.setText(project.getDuration());
+        myViewHolder.tvDuration.setText(project.getDuration()+" months");
 
         myViewHolder.cvCard.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,15 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:padding="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="5dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:background="@drawable/ic_arrow_back_white_24dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -130,6 +121,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
+                                    android:layout_gravity="center"
                                     >
 
                                     <LinearLayout
@@ -142,6 +134,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:text="Projects"
+                                            android:textAlignment="center"
                                             android:fontFamily="@font/nunito_semibold"
                                             android:textSize="16sp"
                                             />
@@ -149,7 +142,9 @@
                                         <TextView
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
+                                            android:id="@+id/profile_project_count"
                                             android:text="100"
+                                            android:textAlignment="center"
                                             />
 
 
@@ -165,6 +160,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:text="Completed"
+                                            android:textAlignment="center"
                                             android:fontFamily="@font/nunito_semibold"
                                             android:textSize="16sp"
                                             />
@@ -173,6 +169,8 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:text="100"
+                                            android:textAlignment="center"
+                                            android:id="@+id/profile_complete_count"
                                             />
 
 
@@ -188,7 +186,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:text="In Progress"
-
+                                            android:textAlignment="center"
                                             android:fontFamily="@font/nunito_semibold"
                                             android:textSize="16sp"
                                             />
@@ -197,6 +195,8 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:text="100"
+                                            android:textAlignment="center"
+                                            android:id="@+id/profile_progress_count"
                                             />
 
 
@@ -211,14 +211,13 @@
 
 
                             <Button
-                                android:layout_width="wrap_content"
+                                android:id="@+id/profile_signout"
+                                android:layout_width="109dp"
                                 android:layout_height="wrap_content"
-                                android:text="Sign out"
-                                android:layout_weight="1"
                                 android:layout_gravity="center"
                                 android:layout_marginBottom="8dp"
-                                android:id="@+id/profile_signout"
-                                android:background="@drawable/buttonstyle"/>
+                                android:background="@drawable/button_selector"
+                                android:text="Sign out" />
 
                         </LinearLayout>
 

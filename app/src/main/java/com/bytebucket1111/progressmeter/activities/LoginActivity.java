@@ -1,6 +1,8 @@
 package com.bytebucket1111.progressmeter.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -22,12 +24,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
+    public static final String MyPREFERENCES = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        getSupportActionBar().hide();
         signInButton = findViewById(R.id.sign_in_button);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -89,16 +92,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void updateUI(final GoogleSignInAccount account)
-    {
-        Toast.makeText(LoginActivity.this,"Logging you in...",Toast.LENGTH_SHORT).show();
+    private void updateUI(final GoogleSignInAccount account) {
+        Toast.makeText(LoginActivity.this, "Logging you in...", Toast.LENGTH_SHORT).show();
         new Thread(new Runnable() {
             public void run() {
                 doWork();
-                Intent intent = new Intent(LoginActivity.this,DatabaseCheckActivity.class);
-                intent.putExtra("account data",account);
-                startActivity(intent);
-                finish();
+                SharedPreferences sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                int n = sharedpreferences.getInt("shared",0);
+                if(n==0)
+                {
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putInt("shared",1);
+                    editor.commit();
+                    Intent intent = new Intent(LoginActivity.this, SlideImagesActivity.class);
+                    intent.putExtra("account data", account);
+                    startActivity(intent);
+                    finish();
+                }
+                else
+                {
+                    Intent intent = new Intent(LoginActivity.this, DatabaseCheckActivity.class);
+                    intent.putExtra("account data", account);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }).start();
     }

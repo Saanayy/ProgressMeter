@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bytebucket1111.progressmeter.NotificationTask;
 import com.bytebucket1111.progressmeter.R;
 import com.bytebucket1111.progressmeter.modal.Contractor;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,7 +34,11 @@ import java.util.concurrent.TimeUnit;
 
 public class DatabaseCheckActivity extends AppCompatActivity {
 
-    public GoogleSignInAccount account;
+    static public GoogleSignInAccount account;
+    public String TAG = "Tag";
+    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Contractors");
+    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    boolean verifyFlag = false;
     private android.support.design.widget.TextInputEditText editTextName, editTextCID, editTextContact, editTextAddress;
     private android.support.design.widget.TextInputLayout ilName, ilCID, ilContact, ilAddress, ilpasscode;
     private ProgressBar progressBar;
@@ -41,13 +46,9 @@ public class DatabaseCheckActivity extends AppCompatActivity {
     private LinearLayout inputLayout, lldetailView;
     private Button btVerify;
     private android.support.design.widget.TextInputEditText etPasscode;
-    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Contractors");
-    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private FirebaseAuth mAuth;
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
-    public String TAG = "Tag";
-    boolean verifyFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,9 @@ public class DatabaseCheckActivity extends AppCompatActivity {
 
         //assigning tgs to user for personal notifications
         OneSignal.sendTag("key1", id);
-        Toast.makeText(getApplicationContext(),PhoneAuthProvider.getInstance().toString(),Toast.LENGTH_SHORT).show();
-
-                // OnVerificationStateChangedCallbacks*/
+        //Toast.makeText(getApplicationContext(), PhoneAuthProvider.getInstance().toString(), Toast.LENGTH_SHORT).show();
+        Log.d("tag",PhoneAuthProvider.getInstance().toString());
+        // OnVerificationStateChangedCallbacks*/
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
             @Override
@@ -88,8 +89,9 @@ public class DatabaseCheckActivity extends AppCompatActivity {
                 //     detect the incoming verification SMS and perform verification without
                 //     user action.
                 Log.d(TAG, "onVerificationCompleted:" + credential);
-                Toast.makeText(getApplicationContext(),"Done",Toast.LENGTH_SHORT).show();
-                verifyFlag=true;
+                //Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
+                verifyFlag = true;
+                editTextContact.getCompoundDrawables()[2].setTint(getResources().getColor(R.color.colorSecondary));
                 // signInWithPhoneAuthCredential(credential);
 
             }
@@ -124,7 +126,7 @@ public class DatabaseCheckActivity extends AppCompatActivity {
                 // Save verification ID and resending token so we can use them later
                 mVerificationId = verificationId;
                 mResendToken = token;
-                Toast.makeText(DatabaseCheckActivity.this,"Done",Toast.LENGTH_LONG).show();
+                //Toast.makeText(DatabaseCheckActivity.this, "Done", Toast.LENGTH_LONG).show();
                 //EditText code = findViewById(R.id.code);
                 //credential = PhoneAuthProvider.getCredential(verificationId, code.getText().toString());
 
@@ -173,11 +175,11 @@ public class DatabaseCheckActivity extends AppCompatActivity {
                     final int DRAWABLE_RIGHT = 2;
                     final int DRAWABLE_BOTTOM = 3;
 
-                    if(event.getAction() == MotionEvent.ACTION_UP) {
-                        if(event.getRawX() >= (editTextContact.getRight() - editTextContact.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        if (event.getRawX() >= (editTextContact.getRight() - editTextContact.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                             // your action here
                             PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                                    "+91"+editTextContact.getText(),        // Phone number to verify
+                                    "+91" + editTextContact.getText(),        // Phone number to verify
                                     60,                 // Timeout duration
                                     TimeUnit.SECONDS,   // Unit of timeout
                                     DatabaseCheckActivity.this,               // Activity (for callback binding)
@@ -240,9 +242,9 @@ public class DatabaseCheckActivity extends AppCompatActivity {
                 flag = false;
                 ilContact.setError("Enter a valid Phone Number");
             }
-            if(!verifyFlag) {
+            if (!verifyFlag) {
                 flag = false;
-                ilContact.setError("Number cannot be verified");
+                ilContact.setError("Press tick icon to verify your number");
             }
 
         }
@@ -287,10 +289,10 @@ public class DatabaseCheckActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    Toast.makeText(DatabaseCheckActivity.this, "Get Verified", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DatabaseCheckActivity.this, "Get Verified", Toast.LENGTH_LONG).show();
+                    Toast.makeText(DatabaseCheckActivity.this, "Get Verified", Toast.LENGTH_LONG).show();
                     progressBar.setVisibility(View.GONE);
-
-
+                    new NotificationTask().execute("New User", "Verification is required", "admin_pragati");
                 }
             }
 

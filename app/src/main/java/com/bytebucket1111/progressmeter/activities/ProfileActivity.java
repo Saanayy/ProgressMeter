@@ -3,9 +3,10 @@ package com.bytebucket1111.progressmeter.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,25 +17,32 @@ import com.bytebucket1111.progressmeter.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView tvName, tvEmail, tvUserId;
+    TextView tvName, tvEmail, tvUserId, tvProjects, tvInProgressCount, tvCompleteCount;
     CircleImageView ivProfileImage;
 
     String name, id, email;
     Uri profileImage;
 
     Button bSignout;
+    long projectCount;
 
     private GoogleApiClient mGoogleApiClient;
+
+    private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Contractors");
 
     @Override
     protected void onStart() {
@@ -55,6 +63,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //initialise all the views
         init();
 
@@ -73,9 +83,31 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+        dbRef.child(id).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                projectCount = dataSnapshot.getChildrenCount();
+                tvProjects.setText(String.valueOf(projectCount));
+                tvCompleteCount.setText(String.valueOf(0));
+                tvInProgressCount.setText(String.valueOf(projectCount - 0));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+            finish();
+        }
+        return true;
+    }
 
     void logOut() {
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(ProfileActivity.this);
@@ -118,8 +150,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void fetchUserData() {
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(ProfileActivity.this);
-        if(acct!=null)
-        {
+        if (acct != null) {
             name = acct.getDisplayName();
             email = acct.getEmail();
             id = acct.getId();
@@ -134,5 +165,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvUserId = findViewById(R.id.profile_userid);
         ivProfileImage = findViewById(R.id.profile_image);
         bSignout = findViewById(R.id.profile_signout);
+        tvProjects = findViewById(R.id.profile_project_count);
+        tvCompleteCount = findViewById(R.id.profile_complete_count);
+        tvInProgressCount = findViewById(R.id.profile_progress_count);
     }
 }

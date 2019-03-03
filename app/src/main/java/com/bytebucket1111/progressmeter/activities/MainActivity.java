@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,6 +59,11 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                 Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(profileIntent);
                 return true;
+
+            case R.id.about_us:
+                Intent aboutusIntent = new Intent(MainActivity.this, AboutUs.class);
+                startActivity(aboutusIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -69,6 +74,11 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+//        setSupportActionBar(myToolbar);
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setTitle("");
 
         fabAddProject = findViewById(R.id.main_add_project);
         fabAddProject.setOnClickListener(new View.OnClickListener() {
@@ -82,9 +92,7 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
         if (acct != null) {
             userId = acct.getId();
         }
-
         fetchProjects();
-
     }
 
     private void fetchProjects() {
@@ -106,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 Project project = dataSnapshot.getValue(Project.class);
                                 Log.d(TAG, "pt:" + I + project.getTitle());
-                                projects.add(0,project);
+                                projects.add(0, project);
                                 if (I == childCount) {
                                     Log.d(TAG, "Ps:" + projects.size());
                                     projectAdapter = new ProjectAdapter(projects, MainActivity.this);
@@ -162,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements AddProjectDialog.
     @Override
     public void addProjectToFirebase(String title, String desc, String geolocation, String startDate, String duration) {
         final String projectKey = dbRefProjects.push().getKey();
-        Log.d(TAG, "addProjectToFirebase: "+projectKey);
+        Log.d(TAG, "addProjectToFirebase: " + projectKey);
         ArrayList<String> updateList = new ArrayList<>();
         updateList.add("dummy");
-        Project project = new Project(title, desc, geolocation, startDate, duration, userId, projectKey, updateList,false);
+        Project project = new Project(title, desc, geolocation, startDate, duration, userId, projectKey, updateList, false);
         dbRefProjects.child(projectKey).setValue(project);
         //dbRefProjects.setValue(null);
         dbRefContractors.child(userId).child("projectIds").addListenerForSingleValueEvent(new ValueEventListener() {

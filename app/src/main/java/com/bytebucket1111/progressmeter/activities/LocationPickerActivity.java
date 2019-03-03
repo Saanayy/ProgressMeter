@@ -6,18 +6,18 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.bytebucket1111.progressmeter.helper.Config;
 import com.bytebucket1111.progressmeter.R;
+import com.bytebucket1111.progressmeter.helper.Config;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.common.api.Status;
@@ -60,7 +60,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     private boolean mLocationPermissionGranted = false;
     private int ACCESS_LOCATION_PERMISSIONS_REQUEST = 123;
     private GoogleApiClient googleApiClient;
-    private int REQUEST_CHECK_SETTINGS =111;
+    private int REQUEST_CHECK_SETTINGS = 111;
     private boolean isMapReady = false;
 
     @Override
@@ -70,7 +70,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getRequiredPermissions();
-        }else{
+        } else {
             mLocationPermissionGranted = true;
         }
 
@@ -95,7 +95,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        if(mLocationPermissionGranted){
+        if (mLocationPermissionGranted) {
             enableGps();
         }
 
@@ -128,14 +128,14 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 // All location settings are satisfied. The client can initialize
                 // location requests here.
                 // ...
-                Log.d(TAG,"GpS Success");
+                Log.d(TAG, "GpS Success");
             }
         });
 
         task.addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG,"GpS Failure");
+                Log.d(TAG, "GpS Failure");
                 if (e instanceof ResolvableApiException) {
                     // Location settings are not satisfied, but this can be fixed
                     // by showing the user a dialog.
@@ -173,7 +173,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
         } else {
             Log.d(TAG, "Permissions granted called");
             mLocationPermissionGranted = true;
-            if(mMap!=null){
+            if (mMap != null) {
                 updateLocationUI();
                 getDeviceLocation();
             }
@@ -196,8 +196,8 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 if (mMap != null) {
                     updateLocationUI();
                     getDeviceLocation();
-                }else{
-                    Log.e(TAG,"in permissions map is null");
+                } else {
+                    Log.e(TAG, "in permissions map is null");
                 }
             } else {
                 Toast.makeText(getApplicationContext(), " permission denied", Toast.LENGTH_SHORT).show();
@@ -211,7 +211,7 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        Log.d(TAG,"onMapReady Called");
+        Log.d(TAG, "onMapReady Called");
         isMapReady = true;
         updateLocationUI();
         getDeviceLocation();
@@ -322,9 +322,9 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
                 @Override
                 public void onInfoWindowClick(Marker marker) {
                     if (marker.equals(newMarker)) {
-                        if (newMarker.getTitle().charAt(0) == 'S'){
+                        if (newMarker.getTitle().charAt(0) == 'S') {
 
-                            String name =  selectedPlace;
+                            String name = selectedPlace;
                             Intent intent = new Intent();
                             com.bytebucket1111.progressmeter.modal.Place place = new com.bytebucket1111.progressmeter.modal.Place(name,
                                     marker.getPosition().latitude, marker.getPosition().longitude);
@@ -368,28 +368,26 @@ public class LocationPickerActivity extends AppCompatActivity implements OnMapRe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CHECK_SETTINGS){
-            if(resultCode == RESULT_OK){
-                Log.d(TAG,"Location turned on");
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            if (resultCode == RESULT_OK) {
+                Log.d(TAG, "Location turned on");
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        if(mMap!=null){
+                        if (mMap != null) {
                             updateLocationUI();
                             getDeviceLocation();
                         }
                     }
                 };
-                if(isMapReady){
+                if (isMapReady) {
                     Toast.makeText(this, "Give us a moment", Toast.LENGTH_SHORT).show();
-                    new android.os.Handler().postDelayed(runnable,3000);
-                }
-                else{
+                    new android.os.Handler().postDelayed(runnable, 3000);
+                } else {
                     enableGps();
                 }
-            }
-            else if(resultCode == RESULT_CANCELED){
-                Log.d(TAG,"Cancelled");
+            } else if (resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "Cancelled");
                 enableGps();
                 Toast.makeText(this, "Please turn on the location to proceed", Toast.LENGTH_SHORT).show();
             }
